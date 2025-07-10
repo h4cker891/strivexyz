@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>strive.xyz</title>
+  <style>
+    :root {
+      --dark: #1e1e1e;
+      --light: #ffffff;
+      --accent: #444;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--dark);
+      color: var(--light);
+    }
+
+    .banner {
+      width: 100%;
+      height: 180px;
+      background-color: var(--accent);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #2a2a2a;
+      border-bottom: 1px solid #444;
+    }
+
+    .back-button,
+    .cart-icon {
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--light);
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .product {
+      background-color: #2d2d2d;
+      padding: 1rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .product:hover {
+      transform: translateY(-5px);
+    }
+
+    .product img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .product h3 {
+      margin: 0.8rem 0 0.4rem;
+    }
+
+    .product-detail,
+    .cart-page {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .product-detail-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .product-detail img {
+      width: 100%;
+      max-width: 350px;
+      height: auto;
+      object-fit: cover;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .product-info {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .quantity {
+      width: 60px;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .button {
+      background-color: var(--light);
+      color: var(--dark);
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 1rem;
+      transition: background-color 0.2s ease;
+    }
+
+    .button:hover {
+      background-color: #ccc;
+    }
+
+    .cart-item {
+      background-color: #2e2e2e;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .input-field {
+      display: block;
+      margin-bottom: 1rem;
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .checkbox-container {
+      margin-bottom: 1rem;
+    }
+
+    .thank-you {
+      text-align: center;
+      font-size: 1.4rem;
+      margin-top: 2rem;
+      color: #90ee90;
+    }
+
+    @media (max-width: 768px) {
+      .product-detail-content {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .product-info {
+        width: 100%;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="banner" id="banner" style="background-image: url('strive.png');"></div>
+
+  <div class="header">
+    <div class="back-button" onclick="goHome()">⬅ Back</div>
+    <div class="cart-icon" onclick="goToCart()">🛒 Cart (<span id="cart-count">0</span>)</div>
+  </div>
+
+  <div id="main"></div>
+
+  <script>
+    const products = [
+  {
+    id: 1,
+    title: "Crystal Dragon",
+    price: 2,
+    image: "dragon.webp",
+    description: "Cool flexible dragon, more colors coming soon."
+  },
+  {
+    id: 2,
+    title: "Passthrough Toy",
+    price: 4,
+    image: "passthrough.webp",
+    description: "Passthrough toy to keep you entertained."
+  },
+  {
+    id: 3,
+    title: "The Rock Croc Charm",
+    price: 1,
+    image: "crocrock.webp",
+    description: "Cheapest offer yet, only $1!!"
+  },
+  {
+    id: 4,
+    title: "Minimalist Phone Stand",
+    price: 3,
+    image: "phone.webp",
+    description: "Sturdy phone stand to prop your phone up, with a minimalist asthetic."
+  },
+  {
+    id: 5,
+    title: "Mini Basketball",
+    price: 4,
+    image: "basketball.webp",
+    description: "A mini basketball game to keep you enterained."
+  },
+  {
+    id: 6,
+    title: "Magic Trick",
+    price: 2,
+    image: "magic.webp",
+    description: "This magic trick alows you stick the wand in, break it, then magically repair it."
+  },
+  
+  {
+    id: 7,
+    title: "Flexible Goose",
+    price: 2,
+    image: "goose.webp",
+    description: "The question is not why, rather it is why not."
+  },
+  {
+    id: 8,
+    title: "Nintendo Switch Game Card Case",
+    price: 3,
+    image: "game.webp",
+    description: "A convenient case for your Switch game cards."
+  },
+  {
+    id: 9,
+    title: "Cat Phone Stand",
+    price: 3,
+    image: "cat.webp",
+    description: "Sturdy phone stand to prop your phone up, in the shape of a cat."
+  },
+  {
+    id: 10,
+    title: "Dog Phone Stand",
+    price: 3,
+    image: "dog.webp",
+    description: "Sturdy phone stand to prop your phone up, in the shape of a dog."
+  },
+  ];
+
+    let cart = [];
+
+    function renderProducts() {
+      const main = document.getElementById("main");
+      main.innerHTML = '<div class="products">' +
+        products.map(p => `
+          <div class="product" onclick="viewProduct(${p.id})">
+            <img src="${p.image}" alt="${p.title}" />
+            <h3>${p.title}</h3>
+            <p>$${p.price}</p>
+          </div>
+        `).join('') + '</div>';
+    }
+
+    function viewProduct(id) {
+      const p = products.find(p => p.id === id);
+      const main = document.getElementById("main");
+      main.innerHTML = `
+        <div class="product-detail">
+          <div class="product-detail-content">
+            <img src="${p.image}" alt="${p.title}" />
+            <div class="product-info">
+              <h2>${p.title}</h2>
+              <p>${p.description}</p>
+              <p><strong>Price:</strong> $${p.price}</p>
+              <label>Quantity: <input type="number" id="quantity" class="quantity" min="0" max="8" value="1" /></label>
+              <div><button class="button" onclick="addToCart(${p.id})">Add to Cart</button></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function addToCart(id) {
+      const p = products.find(p => p.id === id);
+      const qty = parseInt(document.getElementById("quantity").value);
+      if (qty > 0) {
+        cart.push({ ...p, quantity: qty });
+        updateCartCount();
+        goToCart();
+      }
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById("cart-count").innerText = count;
+    }
+
+    function goHome() {
+      renderProducts();
+    }
+
+    function goToCart() {
+      const main = document.getElementById("main");
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      main.innerHTML = `
+        <div class="cart-page">
+          ${cart.map((item, index) => `
+            <div class="cart-item">
+              <strong>${item.title}</strong> - $${item.price} x ${item.quantity}<br/>
+              <button class="button" onclick="removeFromCart(${index})">Remove</button>
+            </div>
+          `).join('')}
+          <h3>Total: $${total.toFixed(2)}</h3>
+          <h3>Checkout</h3>
+          <form action="https://formspree.io/f/xblyekqo" method="POST" onsubmit="return prepareOrder()">
+            <textarea name="order" id="order-details" style="display:none"></textarea>
+            <input class="input-field" name="name" placeholder="Your name" required />
+            <input class="input-field" name="meetup" placeholder="Where and when to meet up (Date, time, and location on campus. Please be specific)" required />
+            <input class="input-field" name="email" type="email" placeholder="Your email (MAKE SURE TO CHECK for important updates about order.)" required />
+            <div class="checkbox-container">
+              <label><input type="checkbox" name="agree" required /> By checking this box, you agree to paying the price above, at the date, time, and location you specified above. (Note: check your email that you submitted above for updates.)</label>
+            </div>
+            <button class="button" type="submit">Place Order</button>
+          </form>
+        </div>
+      `;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartCount();
+      goToCart();
+    }
+
+    function prepareOrder() {
+      const orderDetails = cart.map(item => `${item.title} - $${item.price} x ${item.quantity}`).join('\n');
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      document.getElementById("order-details").value = orderDetails + `\nTotal: $${total.toFixed(2)}`;
+      return true;
+    }
+
+    renderProducts();
+  </script>
+</body>
+</html>
