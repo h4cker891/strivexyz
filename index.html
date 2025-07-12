@@ -85,37 +85,12 @@
       margin: 0.8rem 0 0.4rem;
     }
 
-    .product-detail,
-    .cart-page {
-      padding: 2rem;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .product-detail-content {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-    }
-
-    .product-detail img {
+    .input-field {
+      display: block;
+      margin-bottom: 1rem;
       width: 100%;
-      max-width: 350px;
-      height: auto;
-      object-fit: cover;
-      border-radius: 12px;
-      flex-shrink: 0;
-    }
-
-    .product-info {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .quantity {
-      width: 60px;
-      padding: 0.5rem;
-      border-radius: 4px;
+      padding: 0.8rem;
+      border-radius: 6px;
       border: none;
       font-size: 1rem;
     }
@@ -136,71 +111,9 @@
       background-color: #ccc;
     }
 
-    .cart-item {
-      background-color: #2e2e2e;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-
-    .input-field {
-      display: block;
-      margin-bottom: 1rem;
-      width: 100%;
-      padding: 0.8rem;
-      border-radius: 6px;
-      border: none;
-      font-size: 1rem;
-    }
-
-    .checkbox-container {
-      margin-bottom: 1rem;
-    }
-
-    .thank-you {
-      text-align: center;
-      font-size: 1.4rem;
-      margin-top: 2rem;
-      color: #90ee90;
-    }
-
-    .notice {
-      color: #ff6b6b;
-      font-weight: bold;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-
-    .custom-order-banner {
-      background-color: #2a2a2a;
-      color: var(--light);
-      padding: 2rem;
-      margin-top: 2rem;
-      text-align: center;
-      border-top: 1px solid #444;
-      border-radius: 12px;
-    }
-
-    .custom-order-banner form {
-      max-width: 400px;
-      margin: 1rem auto 0;
-      text-align: left;
-    }
-
-    @media (max-width: 768px) {
-      .product-detail-content {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .product-info {
-        width: 100%;
-      }
-
-      .header {
-        flex-direction: column;
-        gap: 1rem;
-      }
+    #custom-order-form {
+      display: none;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -226,32 +139,31 @@
       { id: 7, title: "Flexible Goose", price: 2, image: "goose.webp", description: "The question is not why, rather it is why not." },
       { id: 8, title: "Nintendo Switch Game Card Case", price: 3, image: "game.webp", description: "A convenient case for your Switch game cards." },
       { id: 9, title: "Cat Phone Stand", price: 3, image: "cat.webp", description: "Sturdy phone stand to prop your phone up, in the shape of a cat." },
-      { id: 10, title: "Dog Phone Stand", price: 3, image: "dog.webp", description: "Sturdy phone stand to prop your phone up, in the shape of a dog." },
+      { id: 10, title: "Dog Phone Stand", price: 3, image: "dog.webp", description: "Sturdy phone stand to prop your phone up, in the shape of a dog." }
     ];
 
     let cart = [];
 
     function renderProducts() {
       const main = document.getElementById("main");
-      main.innerHTML = `
-        <div class="products">
-          ${products.map(p => `
-            <div class="product" onclick="viewProduct(${p.id})">
-              <img src="${p.image}" alt="${p.title}" />
-              <h3>${p.title}</h3>
-              <p>$${p.price}</p>
-            </div>
-          `).join('')}
-        </div>
-
-        <div class="custom-order-banner">
-          <p>Don't see what you want?</p>
-          <button class="button" onclick="toggleCustomOrderForm()">Request a Custom Order</button>
-          <div id="custom-order-form" style="display:none; margin-top: 1.5rem;">
+      main.innerHTML = '<div class="products">' +
+        products.map(p => `
+          <div class="product" onclick="viewProduct(${p.id})">
+            <img src="${p.image}" alt="${p.title}" />
+            <h3>${p.title}</h3>
+            <p>$${p.price}</p>
+          </div>
+        `).join('') + `
+        <div class="product" style="background-color: #444;">
+          <img src="custom.webp" alt="Custom Order" style="opacity: 0.9;" />
+          <h3 style="color: #ffd700;">Request a Custom Order</h3>
+          <p>Don't see what you want? Describe it and pick your colors!</p>
+          <button class="button" style="background-color: #ffd700; color: black;" onclick="toggleCustomOrderForm(event)">Customize</button>
+          <div id="custom-order-form">
             <form action="https://formspree.io/f/xblyekqo" method="POST">
               <input class="input-field" name="customItem" placeholder="What would you like?" required />
-              <label style="display:block; margin-bottom: 0.5rem;">Choose colors (you can pick multiple):</label>
-              <div style="margin-bottom: 1rem;">
+              <label>Choose colors:</label>
+              <div>
                 <label><input type="checkbox" name="colors" value="White" /> White</label><br />
                 <label><input type="checkbox" name="colors" value="Black" /> Black</label><br />
                 <label><input type="checkbox" name="colors" value="Grey" /> Grey</label><br />
@@ -259,16 +171,17 @@
                 <label><input type="checkbox" name="colors" value="Translucent Turquoise" /> Translucent Turquoise</label><br />
                 <label><input type="checkbox" name="colors" value="Translucent Gold" /> Translucent Gold</label>
               </div>
-              <input class="input-field" name="email" type="email" placeholder="Your email (for follow-up)" required />
-              <button class="button" type="submit">Submit Custom Request</button>
+              <input class="input-field" name="email" type="email" placeholder="Your email" required />
+              <button class="button" type="submit" style="background-color: #90ee90;">Submit Request</button>
             </form>
           </div>
         </div>
-      `;
+      </div>`;
     }
 
-    function toggleCustomOrderForm() {
-      const form = document.getElementById("custom-order-form");
+    function toggleCustomOrderForm(event) {
+      event.stopPropagation();
+      const form = event.target.parentElement.querySelector("#custom-order-form");
       form.style.display = form.style.display === "none" ? "block" : "none";
     }
 
@@ -358,6 +271,4 @@
     renderProducts();
   </script>
 </body>
-</html>
-
 </html>
